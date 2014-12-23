@@ -283,7 +283,7 @@ function Editor(){
 				if(row[j] == 1){
 					str += FixedDigits("1")+"|";
 				}else{
-					str += FixedDigits("_")+"|";
+					str += FixedDigits(" ")+"|";
 				}
 			}
 			
