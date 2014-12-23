@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+	<title>Quine-McCluskey</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<script language="javascript" src="js/main.js" ></script>
+	<script language="javascript" src="js/utils.js" ></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+<body style="background-color:#eee; padding:5px;" >
+	<h1> Quine-McCluskey "full_simplify" </h1>
+	<div id="input"> 
+		Function: <input type="text" id="function" value="a,b,c,d" />   (example: a,b,c,d)<br/>
+		ON-SET: <input type="text" id="onset"  value="2,5,9,14" />   (example: 1,3,11,13)<br/> 
+		OFF-SET: <input type="text" id="offset"  value="1,3,11,12,13" />  (example: 2,5,8,9,15) <br />
+		<input type="button" id ="solve" value="Solve" />
+	</div>
+	<div id="solution" > 
+		<div id="output">  </div>
+	</div>
+</body>
+</html>
