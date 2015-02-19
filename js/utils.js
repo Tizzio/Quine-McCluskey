@@ -19,7 +19,7 @@ ArrayFixed = function(arr){
 	}
 	return arr;
 }
-
+ 
 StringRepeat = function(str, count){
 	var s = "";
 	for(var i=0; i<count; i++)
@@ -29,8 +29,8 @@ StringRepeat = function(str, count){
 
 ArrayCountOf = function(array, search){
 	return array.reduce(function(n, val){
-			return n+(val == search)
-		}, 0);
+		return n+(val == search)
+	}, 0);
 }
 Math.clamp = function(x, min, max) {
     return x < min ? min : (x > max ? max : x);

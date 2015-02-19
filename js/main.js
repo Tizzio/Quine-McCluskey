@@ -19,32 +19,27 @@ function Editor(){
 	
 	$("solve").onclick = function(){
 		//ON-SET
-		var val = $("function").value;
-		if(val.length > 2)
-			var letters = val.split(",");
-		else{
-			editor.printError("invalid function input field");
+		var letters = $("function").value.match(/[a-zA-Z]+?[a-zA-Z]*/g);
+		if(letters.length == 0){
+			editor.printError("inserisci almeno una lettera");
 			return;
 		}
 		
+		console.log(letters);
 		
 		//ON-SET
-		var val = $("onset").value;
-		if(val.length > 2)
-			var onset = val.split(",");
-		else{
-			editor.printError("invalid onset input field");
-			return;
-		}
+		var onset = [];
+		var val = $("onset").value.match(/\d+?\d*/g);
 		
+		if(val.length >= 1)
+			onset = val;
+	
 		//OFF-SET
-		var val = $("offset").value;
-		if(val.length > 2)
-			var offset = val.split(",");
-		else{
-			editor.printError("invalid offset input field");
-			return;
-		}
+		var offset = [];
+		var val = $("offset").value.match(/\d+?\d*/g);
+		if(val.length >= 1)
+			offset = val;
+		
 		
 		
 		//SOLVE
@@ -77,13 +72,15 @@ function Editor(){
 			}
 			row.bits = bits;
 			//on-set, off-set, dc-set 
+			
+			console.log(onset, onset.indexOf(i.toString()));
+			console.log(offset, offset.indexOf(i.toString()));
 			if(onset.indexOf(i.toString()) != -1)
-				row.value = 1;
+				row.value = "1";
 			else if(offset.indexOf(i.toString()) != -1)
-				row.value = 0;
+				row.value = "0";
 			else
 				row.value = "-";
-			 
 			
 			table1.push(row);
 		}
@@ -106,16 +103,18 @@ function Editor(){
 	
 	this.SortTable = function(table){
 		newTable = [];
+		var len = table[0].bits.length;
+		console.log(len);
+		for(i = 0; i <= len ; i++){
+			newTable[i] = [];
+		}
+		
 		for(i = 0; i < table.length; i++){
-			var row = table[i];
+			var row = table[i]; 
 			if(row.value != "0"){
 				row.indices.push(i); //indices of this Row;
 				var count = ArrayCountOf(row.bits, "1");
-				if(newTable[count] != undefined){
-					newTable[count].push(row);
-				}else{
-					newTable[count] = [row]; //new array with row
-				}
+				newTable[count].push(row);
 			}
 		}
 		return newTable;
@@ -125,12 +124,13 @@ function Editor(){
 		var tables = [];
 		var tab = table;
 		var count = 0 ;
-		
+		 
 		var maxIterations = 50000;
 		while(true){ //minimization
 			var newTable = [];
 			for(var i = 0; i < tab.length-1; i++){
-				var group1 = tab[i]; 
+				
+				var group1 = tab[i];
 				var group2 = tab[i+1]; 
 				
 				
@@ -187,7 +187,10 @@ function Editor(){
 	}
 	
 	this.MinCoverage = function(onset, table){
+		var tables = [];
+		
 		var tabM = [];
+		var rowsIndices = [];
 		for(var i = 0; i< this.implicants.length; i++){
 			var imp = this.implicants[i];
 			var ind = imp.indices;
@@ -202,14 +205,58 @@ function Editor(){
 							ar[k] = 0;
 						}
 						tabM[m] = ar; 
+						rowsIndices.push(m);
 					}
 					//add implicant to m row 
 					tabM[m][imp.implicant-1] = 1;
 				}
 			}
 		} 
-		console.log(tabM);
+		tables.push(tabM);
+		
+		//column dominance
+		var tab = [];
+		
+		
+		this.removeEmptyColumns(tabM);
+			
+		while(true){
+			
+			break;
+			
+		}
+		
+		//row dominance 
 		return tabM;
+	}
+	 
+	
+	this.removeEmptyColumns = function(table){
+		/*
+		var first = Object.keys(table)[0]; 
+		 console.log("before", table);
+		//check column
+		for(var c = 0; c < table[first].length; c++){
+			
+			var check = true;
+			for(var row in table){
+				if(table[row][c] == 1){
+					check = false;
+					break;
+				}
+			}
+			if(check){
+				console.log("si");
+				//remove column
+				for(var row in table){
+					if(table[row][c] == 1){
+						table[row].splice(c, 1);
+					}
+				} 
+			}
+		}
+		console.log("After", table);
+		*/
 	}
 	
 	this.printAll = function(letters, onset, offset, table1, table2, minimTable, coverTable){
@@ -222,12 +269,10 @@ function Editor(){
 			$("output").innerHTML += FixedDigits(i, 2)+" |"+row.bits.toString()+"| "+row.value+ "<br />";
 		}
 		
-		
-		
 		$("output").innerHTML += "<hr /> <h3>1) Exact 2 level minimization</h3> <br />";
-		
+
 		//Table2
-		
+
 		$("output").innerHTML += "<h4>a) Sorting by '1' count</h3> <br />";
 		for(var i = 0; i < table2.length; i++){
 			var group = table2[i]; 
@@ -317,8 +362,7 @@ function Editor(){
 		} 
 		return arr;
 	}
-	
-	
+
 	this.CheckDontCare = function (bits1, bits2){
 		var arr = [];
 		for(var i = 0; i < bits1.length; i++){ 
@@ -329,7 +373,6 @@ function Editor(){
 		return true;
 	}
 	
-	
 	this.BitsExists = function(array, bits){
 		for(var i = 0; i< array.length; i++){
 			if(array[i].bits.toString() === bits.toString())
@@ -338,14 +381,4 @@ function Editor(){
 		return false;
 	}
 	
-	
-	
 }
-
-
-  
-  
-
- 
-
-
