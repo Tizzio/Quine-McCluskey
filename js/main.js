@@ -24,8 +24,7 @@ function Editor(){
 			editor.printError("inserisci almeno una lettera");
 			return;
 		}
-		
-		console.log(letters);
+		 
 		
 		//ON-SET
 		var onset = [];
@@ -57,8 +56,7 @@ function Editor(){
 		var table1 = [];
 		var tableRows = Math.pow(2, letters.length);
 		this.spaces = tableRows.toString().length;
-		var lettersLength = letters.length;
-		console.log("table rows = "+tableRows);
+		var lettersLength = letters.length; 
 		for(var i = 0; i<  tableRows; i++){
 			var row = new Row();
 			
@@ -72,9 +70,7 @@ function Editor(){
 			}
 			row.bits = bits;
 			//on-set, off-set, dc-set 
-			
-			console.log(onset, onset.indexOf(i.toString()));
-			console.log(offset, offset.indexOf(i.toString()));
+			 
 			if(onset.indexOf(i.toString()) != -1)
 				row.value = "1";
 			else if(offset.indexOf(i.toString()) != -1)
@@ -103,8 +99,7 @@ function Editor(){
 	
 	this.SortTable = function(table){
 		newTable = [];
-		var len = table[0].bits.length;
-		console.log(len);
+		var len = table[0].bits.length; 
 		for(i = 0; i <= len ; i++){
 			newTable[i] = [];
 		}
@@ -112,7 +107,7 @@ function Editor(){
 		for(i = 0; i < table.length; i++){
 			var row = table[i]; 
 			if(row.value != "0"){
-				row.indices.push(i); //indices of this Row;
+				row.indices.push(i); //indices of this Row; 
 				var count = ArrayCountOf(row.bits, "1");
 				newTable[count].push(row);
 			}
@@ -147,7 +142,7 @@ function Editor(){
 								var b = this.ApplyDontCare(row1.bits, row2.bits);
 								if(!this.BitsExists(newGroup, b)){
 									var newRow = new Row();
-									newRow.indices =  row1.indices.concat(row2.indices);
+									newRow.indices = ArrayConcat(row1.indices, row2.indices);
 									newRow.bits = b
 									newGroup.push(newRow); 
 								}
@@ -191,25 +186,22 @@ function Editor(){
 		
 		var tabM = [];
 		var rowsIndices = [];
+		console.log("implicants:", this.implicants);
 		for(var i = 0; i< this.implicants.length; i++){
-			var imp = this.implicants[i];
-			var ind = imp.indices;
-			for(var j = 0; j< ind.length; j++){
-				var m = ind[j];
-				
-				if(table[m].value == "1"){
-					
-					if(!tabM[m]){ //initialize row if not exists
-						var ar = [];
-						for(var k =0; k< this.implicants.length; k++){
-							ar[k] = 0;
-						}
-						tabM[m] = ar; 
-						rowsIndices.push(m);
+			var imp = this.implicants[i]; 
+			for(var j in imp.indices){ 
+				var m = imp.indices[j];  
+				if(!tabM[m]){ //initialize row if not exists
+					var ar = [];
+					for(var k =0; k< this.implicants.length; k++){
+						ar[k] = 0;
 					}
-					//add implicant to m row 
-					tabM[m][imp.implicant-1] = 1;
+					tabM[m] = ar; 
+					rowsIndices.push(m);
 				}
+				//add implicant to m row 
+				tabM[m][imp.implicant-1] = 1;
+			
 			}
 		} 
 		tables.push(tabM);
@@ -224,8 +216,7 @@ function Editor(){
 			
 			break;
 			
-		}
-		
+		} 
 		//row dominance 
 		return tabM;
 	}
@@ -318,7 +309,7 @@ function Editor(){
 		$("output").innerHTML += str+"<br />";
 		$("output").innerHTML += StringRepeat("-", this.implicants.length * (this.spaces +1) +4)+"<br />";
 		
-		for(var i = 0; i < coverTable.length; i++){ 
+		for(var i in coverTable){  
 			var row = coverTable[i];
 			if(row == undefined) continue; 
 			

@@ -7,7 +7,15 @@ window.requestAnimFrame = (function(callback) {
 	  window.setTimeout(callback, 1000 / 60);
 	};
 })();
+ 
 
+ArrayConcat = function(array1, array2) {
+	var newArray = [];
+	array1.forEach(function(v) {newArray.push(v)}, this);
+	array2.forEach(function(v) {newArray.push(v)}, this);
+	return newArray;
+	
+}
 
 FixedDigits = function(number){
 	return (StringRepeat(" ", editor.spaces) + number).substr(-editor.spaces).replace(" ", "&nbsp;");
